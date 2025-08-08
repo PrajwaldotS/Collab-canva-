@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collaborative Drawing Canvas</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.7.4/dist/socket.io.js"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto p-4">
+        <h1 class="text-3xl font-bold text-center mb-6 text-gray-800">Collaborative Drawing Canvas</h1>
+        
+        <!-- Toolbar -->
+        <div class="bg-white rounded-lg shadow-lg p-4 mb-4">
+            <div class="flex flex-wrap items-center gap-4">
+                <!-- Drawing Tools -->
+                <div class="flex gap-2">
+                    <button id="pencil" class="tool-btn bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors">
+                        <i class="fas fa-pencil-alt"></i> Pencil
+                    </button>
+                    <button id="eraser" class="tool-btn bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition-colors">
+                        <i class="fas fa-eraser"></i> Eraser
+                    </button>
+                    <button id="text" class="tool-btn bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors">
+                        <i class="fas fa-font"></i> Text
+                    </button>
+                </div>
+                
+                <!-- Shape Tools -->
+                <div class="flex gap-2">
+                    <button id="rectangle" class="tool-btn bg-purple-500 text-white px-4 py-2 rounded-lg hover:bg-purple-600 transition-colors">
+                        <i class="fas fa-square"></i> Rectangle
+                    </button>
+                    <button id="circle" class="tool-btn bg-indigo-500 text-white px-4 py-2 rounded-lg hover:bg-indigo-600 transition-colors">
+                        <i class="fas fa-circle"></i> Circle
+                    </button>
+                    <button id="square" class="tool-btn bg-pink-500 text-white px-4 py-2 rounded-lg hover:bg-pink-600 transition-colors">
+                        <i class="fas fa-square"></i> Square
+                    </button>
+                </div>
+                
+                <!-- Controls -->
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-2">
+                        <label for="thickness" class="text-sm font-medium">Thickness:</label>
+                        <input type="range" id="thickness" min="1" max="20" value="3" class="w-24">
+                        <span id="thickness-value" class="text-sm font-bold">3px</span>
+                    </div>
+                    
+                    <div class="flex items-center gap-2">
+                        <label for="color" class="text-sm font-medium">Color:</label>
+                        <input type="color" id="color" value="#000000" class="w-12 h-10 rounded border">
+                    </div>
+                    
+                    <button id="clear" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition-colors">
+                        <i class="fas fa-trash"></i> Clear
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Canvas Container -->
+        <div class="bg-white rounded-lg shadow-lg p-4">
+            <canvas id="canvas" class="border-2 border-gray-300 rounded cursor-crosshair" width="1200" height="800"></canvas>
+        </div>
+        
+        <!-- Status Bar -->
+        <div class="bg-white rounded-lg shadow-lg p-4 mt-4">
+            <div class="flex items-center justify-between">
+                <div class="text-sm text-gray-600">
+                    Active Tool: <span id="active-tool" class="font-bold">Pencil</span>
+                </div>
+                <div class="text-sm text-gray-600">
+                    Connected Users: <span id="user-count" class="font-bold">1</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Text Input Modal -->
+    <div id="text-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white p-6 rounded-lg shadow-xl">
+            <h3 class="text-lg font-bold mb-4">Enter Text</h3>
+            <input type="text" id="text-input" class="w-full p-2 border rounded mb-4" placeholder="Type your text here...">
+            <div class="flex gap-2">
+                <button id="text-ok" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">OK</button>
+                <button id="text-cancel" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
